@@ -1,3 +1,5 @@
+include(PCHsupport)
+
 set(SOURCES
     analyzer.cpp
     clone.cpp
@@ -20,6 +22,11 @@ set(SOURCES
     patterns.cpp
     printer.cpp
     types.cpp
+)
+
+precompile_header(clay.hpp SOURCES pch.cpp)
+
+list(APPEND SOURCES
     hirestimer.cpp
     profiler.cpp
 )
@@ -48,7 +55,7 @@ endif()
 add_executable(clay ${SOURCES})
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
-    set_target_properties(clay PROPERTIES COMPILE_FLAGS "${LLVM_CXXFLAGS}")
+    set_target_properties(clay PROPERTIES COMPILE_FLAGS "-H ${LLVM_CXXFLAGS}")
 else()
     set_target_properties(clay PROPERTIES COMPILE_FLAGS "${LLVM_CXXFLAGS} -DNDEBUG")
 endif()

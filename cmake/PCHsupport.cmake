@@ -1,0 +1,12 @@
+# header to precompile - list of sources - source to precompile
+macro(precompile_header hdr src pchsrc)
+	if(MSVC)
+		set_source_files_properties(${pchsrc} PROPERTIES COMPILE_FLAGS /Yc${hdr})
+		foreach(s ${${src}})
+			set_source_files_properties(${s} PROPERTIES COMPILE_FLAGS /Yu${hdr})
+		endforeach()
+		list(INSERT ${src} 0 ${pchsrc})
+	elseif(CMAKE_COMPILER_IS_GNUCXX)
+		set_source_files_properties(${hdr} PROPERTIES COMPILE_FLAGS "-x c++-header")
+	endif()
+endmacro()
